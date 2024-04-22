@@ -24,6 +24,7 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
+var hp = 5;
 
 var game = new Phaser.Game(config);
 
@@ -33,7 +34,7 @@ function preload ()
     this.load.image('ground', 'assets/platform.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
-    this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+    this.load.image('dude', 'assets/dude.png');
 }
 
 function create ()
@@ -46,40 +47,21 @@ function create ()
 
     //  Додаємо землю
     //  Масштабуємо під екран
-    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+    platforms.create(400, 850, 'ground').setScale(7).refreshBody();
 
     //  Додаємо ще платформи
     platforms.create(600, 400, 'ground');
     platforms.create(50, 250, 'ground');
     platforms.create(750, 220, 'ground');
+    platforms.create(200, 400, 'ground')
 
     // Додаємо гравця
-    player = this.physics.add.sprite(100, 450, 'dude');
+    player = this.physics.add.sprite(100, 450, 'dude').setScale(0.1);
 
     //  Властивості фізики гравця
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
-
-    //  Анімації гравця
-    this.anims.create({
-        key: 'left',
-        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-        frameRate: 10,
-        repeat: -1
-    });
-
-    this.anims.create({
-        key: 'turn',
-        frames: [ { key: 'dude', frame: 4 } ],
-        frameRate: 20
-    });
-
-    this.anims.create({
-        key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-        frameRate: 10,
-        repeat: -1
-    });
+    
     // Керування гравцем на стрілочки
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -100,7 +82,8 @@ function create ()
     bombs = this.physics.add.group();
 
     //  Рахунок гравця
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = this.add.text(0, 0, 'score: 0', { fontSize: '32px', fill: '#000' });
+    hpText = this.add.text(0, 0, 'score: 0', { fontSize: '32px', fill: '#000' });
 
     //  Додаємо коллайдери
     this.physics.add.collider(player, platforms);
@@ -184,4 +167,9 @@ function hitBomb (player, bomb)
 
     gameOver = true;
 }
+function setHP(){
+
+    hpText.setText(hp);
+
+}   
 
